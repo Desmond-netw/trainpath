@@ -66,11 +66,15 @@ func simulateTurns(paths []domain.Path, start, end string) []domain.Turn {
 
 			from := t.path[t.pos]
 			to := t.path[t.pos+1]
-			_ = from
+			ek := edgeKey(from, to)
+			if turnOcc.Edge[ek] {
+				continue
+			}
 			// Start/end can hold unlimited trains; intermediate stations cannot.
 			if to != end && turnOcc.Station[to] {
 				continue
 			}
+			turnOcc.Edge[ek] = true
 
 			if to != end && to != start {
 				turnOcc.Station[to] = true

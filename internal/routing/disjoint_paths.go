@@ -6,7 +6,7 @@ import (
 
 	"stations-pathfinder/internal/domain"
 )
-
+// maxCandidatePaths limits the number of simple paths we enumerate to avoid combinatorial explosion. This is a tunable parameter that balances completeness with performance.
 const maxCandidatePaths = 64
 
 // FindCandidatePaths returns multiple simple path candidates sorted by length.

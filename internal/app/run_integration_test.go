@@ -108,3 +108,36 @@ func TestRun_ErrorWhenMapHasMoreThan10000Stations(t *testing.T) {
 		t.Fatalf("expected stderr to start with %q, got %q", "Error:", got)
 	}
 }
+
+func TestRun_BeginningAndTerminus_20Trains_CompletesWithin11Turns(t *testing.T) {
+	args := []string{
+		"stations-pathfinder",
+		"../../network_map/beginning_and_terminus.map",
+		"beginning",
+		"terminus",
+		"20",
+	}
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	code := app.Run(args, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("expected exit code 0, got %d, stderr=%q", code, stderr.String())
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("expected empty stderr, got %q", stderr.String())
+	}
+
+	out := strings.TrimSpace(stdout.String())
+	if out == "" {
+		t.Fatalf("expected non-empty movement output")
+	}
+	turns := strings.Count(out, "\n") + 1
+	if turns <= 1 {
+		t.Fatalf("expected more than 1 turn, got %d", turns)
+	}
+	if turns > 11 {
+		t.Fatalf("expected at most 11 turns, got %d", turns)
+	}
+}
